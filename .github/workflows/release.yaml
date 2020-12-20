@@ -21,35 +21,31 @@ jobs:
 #        run:
       - name: Set env
         run: |
-              GITHUB_REF_NAME=${{ github.ref }}
-              echo "GITHUB_REF_NAME=${GITHUB_REF_NAME#refs/*/}" >> $GITHUB_ENV
+              echo "GITHUB_REF_NAME=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 #              echo "GITHUB_REF_NAME=${GITHUB_REF_NAME#refs/*/}" >> $GITHUB_ENV
 #      - name: Test
 #        run: echo $GITHUB_SHA_SHORT
       - name: zip assets
-#        run: (cd wok_pack && zip -r ../wok_pack_${{ github.ref }}.zip .)
         run: |
-              echo refname ${GITHUB_REF_NAME}
-              echo refref ${GITHUB_REF}
-              echo ${{ github.ref }}
+              (cd wok_pack && zip -r ../wok_pack_${GITHUB_REF_NAME}.zip .)
 
-#      - name: Create Release
-#        id: create_release
-#        uses: actions/create-release@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          tag_name: ${{ github.ref }}
-#          release_name: Release ${{ github.ref }}
-#          draft: false
-#          prerelease: false
-#      - name: Upload Release Asset
-#        id: upload-release-asset
-#        uses: actions/upload-release-asset@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-#          asset_path: ./wok_pack_${{ github.ref }}.zip
-#          asset_name: wok_pack_${{ github.ref }}.zip
-#          asset_content_type: application/zip
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: ./wok_pack_${{ env.GITHUB_REF_NAME }}.zip
+          asset_name: wok_pack_${{ env.GITHUB_REF_NAME }}.zip
+          asset_content_type: application/zip
