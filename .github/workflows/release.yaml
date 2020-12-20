@@ -15,12 +15,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Clean
-        run: find . -name "*.pdn" -exec rm {} +
+#      - name: Clean
+#        run: find . -name "*.pdn" -exec rm {} +
       - name: zip assets
 #        run: (cd wok_pack && zip -r ../wok_pack_${{ github.ref }}.zip .)
         run: |
-              echo ${GITHUB_REF#refs/*/} <- this should be current tag or branch name
+              echo ${env.GITHUB_REF#refs/*/} <- this should be current tag or branch name
+              echo ${{ github.ref }}
+              echo ${{ github.ref#refs/*/ }}
 #      - name: Create Release
 #        id: create_release
 #        uses: actions/create-release@v1
