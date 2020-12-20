@@ -26,7 +26,6 @@ jobs:
       - name: zip assets
 #        run: (cd wok_pack && zip -r ../wok_pack_${{ github.ref }}.zip .)
         run: |
-              echo ${GITHUB_REF#refs/*/} <- this should be current tag or branch name
               echo ${{ env.GITHUB_REF }} huha
               echo ${{ github.ref }}
 
