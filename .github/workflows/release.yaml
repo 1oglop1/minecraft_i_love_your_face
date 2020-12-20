@@ -19,14 +19,17 @@ jobs:
 #        run: find . -name "*.pdn" -exec rm {} +
 #      - name: lol
 #        run:
-#      - name: Set env
-#        run: echo "GITHUB_REF_NAME=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV
+      - name: Set env
+        run: echo "GITHUB_REF_NAME=${{ github.ref }}" >> $GITHUB_ENV
 #      - name: Test
 #        run: echo $GITHUB_SHA_SHORT
       - name: zip assets
 #        run: (cd wok_pack && zip -r ../wok_pack_${{ github.ref }}.zip .)
         run: |
+              env
+              echo ${GITHUB_REF_NAME#refs/*/} <- this should be current tag or branch name
               echo ${{ env.GITHUB_REF }} huha
+              echo ${{ github.ref }}
               echo ${{ github.ref }}
 
 #      - name: Create Release
