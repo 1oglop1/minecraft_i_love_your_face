@@ -20,16 +20,17 @@ jobs:
 #      - name: lol
 #        run:
       - name: Set env
-        run: echo "GITHUB_REF_NAME=${{ github.ref }}" >> $GITHUB_ENV
+        run: |
+              GITHUB_REF_NAME=${{ github.ref }}
+              echo "GITHUB_REF_NAME=${GITHUB_REF_NAME#refs/*/}" >> $GITHUB_ENV
+#              echo "GITHUB_REF_NAME=${GITHUB_REF_NAME#refs/*/}" >> $GITHUB_ENV
 #      - name: Test
 #        run: echo $GITHUB_SHA_SHORT
       - name: zip assets
 #        run: (cd wok_pack && zip -r ../wok_pack_${{ github.ref }}.zip .)
         run: |
-              env
-              echo ${GITHUB_REF_NAME#refs/*/} <- this should be current tag or branch name
-              echo ${{ env.GITHUB_REF }} huha
-              echo ${{ github.ref }}
+              echo refname ${GITHUB_REF_NAME}
+              echo refref ${GITHUB_REF}
               echo ${{ github.ref }}
 
 #      - name: Create Release
