@@ -15,16 +15,18 @@ jobs:
         uses: actions/checkout@v2
       - name: Clean
         run: find . -name "*.pdn" -exec rm {} +
+      - name: Set env
+        run: echo "GITHUB_REF_NAME=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: zip assets
-        run: (cd wok_pack && zip -r ../wok_pack_${{ github.ref }}.zip .)
+        run: (cd wok_pack && zip -r ../wok_pack_${GITHUB_REF_NAME}.zip .)
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ env.GITHUB_REF_NAME }}
+          release_name: Release ${{ env.GITHUB_REF_NAME }}
           draft: false
           prerelease: false
       - name: Upload Release Asset
@@ -33,7 +35,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ./wok_pack_${{ github.ref }}.zip
-          asset_name: wok_pack_${{ github.ref }}.zip
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./wok_pack_${{ env.GITHUB_REF_NAME }}.zip
+          asset_name: wok_pack_${{ env.GITHUB_REF_NAME }}.zip
           asset_content_type: application/zip
